@@ -2,7 +2,7 @@
     "rewrites": [
       {
         "source": "/chat",
-        "destination": "https://<YOUR_RENDER_URL_HERE>/chat"
+        "destination": "https://jarvis-ai-xhlp.onrender.com/chat"
       }
     ]
   }
