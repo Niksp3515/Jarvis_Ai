@@ -1,41 +1,13 @@
-import faiss
-import numpy as np
-from sentence_transformers import SentenceTransformer
-
-# 🔹 Load embedding model
-embed_model = SentenceTransformer('all-MiniLM-L6-v2')
-
-# 🔹 FAISS index
-dimension = 384
-index = faiss.IndexFlatL2(dimension)
-
-# 🔹 Memory storage
 memory_texts = []
 
-
-# ✅ Store memory
 def store_memory(text):
-    embedding = embed_model.encode([text])
-    embedding = np.array(embedding).astype('float32')
-
-    index.add(embedding)
     memory_texts.append(text)
+    # Keep only the last 15 interactions to prevent excessive token burning
+    if len(memory_texts) > 15:
+        memory_texts.pop(0)
 
-
-# ✅ Retrieve memory
 def retrieve_memory(query, k=3):
-    if len(memory_texts) == 0:
+    if not memory_texts:
         return ""
-
-    query_embedding = embed_model.encode([query])
-    query_embedding = np.array(query_embedding).astype('float32')
-
-    distances, indices = index.search(query_embedding, k)
-
-    results = []
-    for i in indices[0]:
-        if i < len(memory_texts):
-            results.append(memory_texts[i])
-
-    # remove duplicates
-    return "\n".join(list(set(results)))
+    # Since we want context, just return the last `k` interactions seamlessly
+    return "\n".join(memory_texts[-k:])

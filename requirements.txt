@@ -4,6 +4,3 @@ pydantic
 google-genai
 python-dotenv
 google-search-results
-sentence-transformers
-faiss-cpu
-numpy
